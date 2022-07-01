@@ -15,7 +15,7 @@ router = APIRouter()
 async def get_all_cleanings(
     cleanings_repo: CleaningsRepository = Depends(get_repository(CleaningsRepository)) 
 ) -> List[CleaningPublic]:
-    return await cleanings_repo.get_all_cleanings()
+    return await cleanings_repo.get_all_cleanings() 
     
 
 @router.post("/", response_model=CleaningPublic, name="cleanings:create-cleaning", status_code=HTTP_201_CREATED)
@@ -23,7 +23,7 @@ async def create_new_cleaning(
     new_cleaning: CleaningCreate = Body(..., embed=True),
     cleanings_repo: CleaningsRepository = Depends(get_repository(CleaningsRepository)),
 ) -> CleaningPublic:
-
+    
     created_cleaning = await cleanings_repo.create_cleaning(new_cleaning=new_cleaning)
 
     return created_cleaning
