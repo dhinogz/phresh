@@ -13,6 +13,9 @@ from databases import Database
 import alembic
 from alembic.config import Config
 
+from app.core.config import SECRET_KEY, JWT_TOKEN_PREFIX
+from app.services import auth_service
+
 from app.models.cleaning import CleaningCreate, CleaningInDB
 from app.db.repositories.cleaning import CleaningsRepository
 
@@ -82,3 +85,15 @@ async def test_user(db: Database) -> UserInDB:
         return existing_user
 
     return await user_repo.register_new_user(new_user=new_user)
+
+@pytest.fixture
+def authorized_client(client: AsyncClient, test_user: UserInDB) -> AsyncClient:
+    access_token = auth_service.create_access_token_for_user(user=test_user, secret_key=str(SECRET_KEY))
+
+    client.headers = {
+        **client.headers,
+        "Authorization": f"{JWT_TOKEN_PREFIX} {access_token}",
+    }
+
+    return client
+    

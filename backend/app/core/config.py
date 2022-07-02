@@ -1,4 +1,3 @@
-from xml.etree.ElementTree import VERSION
 from databases import DatabaseURL
 from starlette.config import Config
 from starlette.datastructures import Secret
